@@ -8,7 +8,9 @@ TestCase::TestCase(const string st, ostream& myStream): name(st), output(&myStre
 
 TestCase& TestCase::print()
 {
-	*output << name << "Number of tests:" << total << "Faild:" << faild << "Succeed" << succeed << endl;
+	//Test int operators: 2 failed, 5 passed, 7 total.
+	*output << name << ": " << faild << " failed, " << succeed << " passed, " << total << " total" << endl;
+	*output << "---" << endl;
 	return *this;
 }
 

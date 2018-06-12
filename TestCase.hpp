@@ -5,6 +5,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
 
 	template<typename T>
 	inline TestCase& check_equal(T a, T b)
-	{
+	{// MyStrct(5) should equal MyStrct(5)!
 		total++;
 		if (a == b)
 		{
@@ -30,7 +31,7 @@ public:
 		}
 		else
 		{
-			*output << name << "Failure in test number" << total << "Arguments are not equal" << endl;
+			*output << name << ": Failure in test #" << total << ": " << a << " should be equal " << b << "!" << endl;
 			faild++;
 		}
 		return *this;
@@ -38,15 +39,15 @@ public:
 	
 	template<typename T>
 	TestCase& check_different(T a, T b)
-	{
+	{//OtherStruct(5) should differ than OtherStruct(6)!
 		total++;
-		if (a == b)
+		if (!(a != b))
 		{
 			faild++;
+			*output << name << ": Failure in test #" << total << ": " << a << " should differ than " << b << "!"  << endl;
 		}
 		else
 		{
-			*output << name << "Failure in test number" << total << "Arguments are equal" << endl;
 			succeed++;
 		}
 		return *this;
@@ -54,7 +55,7 @@ public:
 
 	template<typename T>
 	TestCase& check_output(T element, string desired)
-	{
+	{//string value should be MyStruct(5) but is MyStrct(5)
 		total++;
 		std::stringstream ss;
 		ss << element;
@@ -64,6 +65,7 @@ public:
 		}
 		else
 		{
+			*output << name << ": Failure in test #" << total << ": string value should be " << desired << " but is " << ss.str() << "!" << endl;
 			faild++;
 		}
 		return *this;
@@ -73,12 +75,16 @@ public:
 	TestCase& check_function(S(*func) (T val), T element, S desired)
 	{
 		total++;
-		if (func(element) == desired)
+		S re = func(element);
+		if (re == desired)
 		{
 			succeed++;
 		}
 		else
 		{
+			*output << name << ": Failure in test #" << total <<
+				": Function should return " << desired <<
+				" but returned " << re << "!" << endl;
 			faild++;
 		}
 		return *this;
@@ -88,12 +94,16 @@ public:
 	TestCase & check_function(R(*func)(const T &v), const T element, R desired)
 	{
 		total++;
-		if (func(element) == desired)
+		R re = func(element);
+		if (re == desired)
 		{
 			succeed++;
 		}
 		else
 		{
+			*output << name << ": Failure in test #" << total <<
+				": Function should return " << desired <<
+				" but returned " << re << "!" << endl;
 			faild++;
 		}
 		return *this;
@@ -103,12 +113,16 @@ public:
 	TestCase & check_function(function<R(const T& v)> & f, const T elem, R desired)
 	{
 		total++;
-		if (f(elem) == desired)
+		R re = f(elem);
+		if (re == desired)
 		{
 			succeed++;
 		}
 		else
 		{
+			*output << name << ": Failure in test #" << total <<
+				": Function should return " << desired <<
+				" but returned " << re << "!" << endl;
 			faild++;
 		}
 		return *this;
@@ -118,12 +132,16 @@ public:
 	TestCase & check_function(func f, V elem, R desired)
 	{
 		total++;
-		if (f(elem) == desired)
+		R re = f(elem);
+		if (re == desired)
 		{
 			succeed++;
 		}
 		else
 		{
+			*output << name << ": Failure in test #" << total <<
+				": Function should return " << desired <<
+				" but returned " << re << "!" << endl;
 			faild++;
 		}
 		return *this;
